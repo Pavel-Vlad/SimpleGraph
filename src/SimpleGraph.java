@@ -70,7 +70,8 @@ class SimpleGraph {
         // Список пустой, если пути нету.
 
         ArrayList<Vertex> resultList = new ArrayList<>(); // результирующий список
-        if (VFrom >= max_vertex || VTo >= max_vertex || vertex[VFrom] == null || vertex[VTo] == null) return resultList; // если нет переданных узлов
+        if (vertex[VFrom] == null || vertex[VTo] == null)
+            return resultList; // если нет переданных узлов
         Stack<Integer> indexStack = new Stack<>(); // стэк для поиска
         for (int i = 0; i < max_vertex; i++) vertex[i].Hit = false; // обнуление
 
@@ -92,6 +93,47 @@ class SimpleGraph {
         indexStack.push(VFrom);
         indexStack.push(VTo);
         while (!indexStack.empty()) resultList.add(0, vertex[indexStack.pop()]);
+        return resultList;
+    }
+
+    public ArrayList<Vertex> BreadthFirstSearch(int VFrom, int VTo) {
+        // Узлы задаются позициями в списке vertex.
+        // Возвращается список узлов -- путь из VFrom в VTo.
+        // Список пустой, если пути нету.
+        ArrayList<Vertex> resultList = new ArrayList<>(); // результирующий список
+        ArrayList<Integer> tempList = new ArrayList<>(); // результирующий список
+        if (vertex[VFrom] == null || vertex[VTo] == null) return resultList; // если нет переданных узлов
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < max_vertex; i++) vertex[i].Hit = false; // обнуление
+
+        vertex[VFrom].Hit = true;
+
+        while (!IsEdge(VFrom, VTo)) { // метод IsEdge возвращает истину если ребро между узлами есть
+            for (int i = 0; i < max_vertex; i++) {
+                if (IsEdge(VFrom, i) && !vertex[i].Hit) {
+                    vertex[i].Hit = true;
+                    queue.add(i);
+                }
+                if (i == max_vertex - 1) {
+                    if (!queue.isEmpty()) {
+                        tempList.add(VFrom);
+                        VFrom = queue.remove();
+                    } else return resultList;
+                }
+            }
+        }
+        tempList.add(VFrom);
+        tempList.add(VTo);
+        int i;
+        for (i = 0; i < tempList.size() - 1; ) {
+            for (int j = tempList.size() - 1; j >= 0; j--)
+                if (IsEdge(tempList.get(i), tempList.get(j))) {
+                    resultList.add(vertex[tempList.get(i)]);
+                    i = j;
+                    break;
+                }
+        }
+        resultList.add(vertex[tempList.get(i)]);
         return resultList;
     }
 }
