@@ -97,11 +97,8 @@ class SimpleGraph {
     }
 
     public ArrayList<Vertex> BreadthFirstSearch(int VFrom, int VTo) {
-        // Узлы задаются позициями в списке vertex.
-        // Возвращается список узлов -- путь из VFrom в VTo.
-        // Список пустой, если пути нету.
         ArrayList<Vertex> resultList = new ArrayList<>(); // результирующий список
-        ArrayList<Integer> tempList = new ArrayList<>(); // результирующий список
+        ArrayList<Integer> tempList = new ArrayList<>(); // список в который заносятся все узлы пути
         if (vertex[VFrom] == null || vertex[VTo] == null) return resultList; // если нет переданных узлов
         Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < max_vertex; i++) vertex[i].Hit = false; // обнуление
