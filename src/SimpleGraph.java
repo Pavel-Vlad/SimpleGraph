@@ -133,4 +133,33 @@ class SimpleGraph {
         resultList.add(vertex[tempList.get(i)]);
         return resultList;
     }
+
+    public ArrayList<Vertex> WeakVertices() {
+        // возвращает список узлов вне треугольников
+        ArrayList<Vertex> resultList = new ArrayList<>(); // результирующий список
+        ArrayList<Integer> tempList = new ArrayList<>(); // вспомогательный список
+        boolean rel;
+
+        for (int i = 0; i < max_vertex; i++) {
+            for (int j = 0; j < max_vertex; j++) {
+                if (m_adjacency[i][j] == 1) tempList.add(j);
+            }
+            rel = false;
+            if (tempList.size() > 1) {
+                for (int j = 0; j < tempList.size() - 1; j++) {
+                    int tempIndex = tempList.remove(j);
+                    for (Integer integer : tempList) {
+                        if (m_adjacency[tempIndex][integer] == 1) {
+                            rel = true;
+                            break;
+                        }
+                    }
+                    if (rel) break;
+                }
+            }
+            tempList.clear();
+            if (!rel) resultList.add(vertex[i]);
+        }
+        return resultList;
+    }
 }
